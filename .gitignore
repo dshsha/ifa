@@ -1,6 +1,12 @@
+# directories
+logs
+cams
 env
 .venv
-cams
 
+
+
+
+# mask files
 *.zip
 *.nc

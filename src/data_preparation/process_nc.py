@@ -1,8 +1,19 @@
+from pathlib import Path
+
 import xarray as xr
 import numpy as np
 import pandas as pd
 
+
+class ProcessNC(object):
+    def __init__(self, file_path):
+        self.df = xr.open_dataset(file_path).to_dataframe()
+
+
 if __name__ == "__main__":
-    ds = xr.open_dataset("../cams.eaq.vra.ENSa.pm10.l1000.2018-04.area-subset.56.23.36.87.55.34.38.59.nc")
-    df = ds.to_dataframe()
-    df.to_csv('df.csv')
+    print(Path(Path.cwd().parent,
+                              "data",
+                              "cams-europe-air-quality-reanalyses.nc"))
+    obj = ProcessNC(Path(Path.cwd().parent,
+                              "data",
+                              "cams-europe-air-quality-reanalyses.nc"))
