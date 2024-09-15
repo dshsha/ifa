@@ -46,7 +46,7 @@ class UseCdsApi(object):
             "type": ["validated_reanalysis"],
             "year": [year],
             "month": [month],
-            "area": [56.23, 36.87, 55.34, 38.59, ], }
+            "area": [56.23, 36.7, 55.34, 38.59, ], }
         try:
             self.client.retrieve(dataset,
                                  request,
@@ -95,7 +95,7 @@ if __name__ == "__main__":
                          "500", "750",
                          "1000", "2000",
                          "3000", "5000"]
-    years: list[str] = ["2018", "2019", "2020", "2021", "2022"]
+    years: list[str] = ["2018", "2019", "2020", "2021", "2022", "2023"]
     months: list[str] = ["01", "02", "03", "05", "06", "07", "08", "09", "10", "11", "12"]
 
     obj.download_pipeline(dataset=dataset,

@@ -2,6 +2,7 @@
 tok.yaml
 
 # directories
+.ipynb_checkpoints
 .venv
 .idea
 logs
@@ -11,4 +12,3 @@ cams
 # mask files
 *.zip
 *.nc
-*.csv
