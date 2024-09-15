@@ -1,12 +1,14 @@
+# files
+tok.yaml
+
 # directories
+.venv
+.idea
 logs
 cams
-env
-.venv
-
-
 
 
 # mask files
 *.zip
 *.nc
+*.csv
