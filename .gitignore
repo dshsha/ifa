@@ -1,10 +1,12 @@
+# files
+tok.yaml
+
 # directories
+.ipynb_checkpoints
+.venv
+.idea
 logs
 cams
-env
-.venv
-
-
 
 
 # mask files
