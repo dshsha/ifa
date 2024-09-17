@@ -14,9 +14,10 @@ logging.basicConfig(level=logging.INFO,
                     filemode="w",
                     format="%(asctime)s %(levelname)s %(message)s")
 
+
 class UseCdsApi(object):
     """
-    Класс для выгрузки CAMS European air quality reanalyses.
+    Класс для выгрузки CAMS.
     """
 
     def __init__(self, token: str) -> None:
@@ -30,56 +31,69 @@ class UseCdsApi(object):
 
     def download_data(self,
                       dataset: str,
+                      variable: list[str],
                       year: str,
                       month: str,
-                      level: str) -> None:
+                      level: str,
+                      area: list[float]) -> None:
         """
         :param dataset: имя датасета
-        :param request:
-        :return:
+        :param variable: набор веществ
+        :param year: года
+        :param month: месяцы
+        :param level: уровни
+        :param area: ограничения по координатам
+        :return: None
         """
         # шаблон запроса
         request: dict[str, list[int] | list[str]] = {
-            "variable": ["particulate_matter_2.5um"],
+            "variable": variable,
             "model": ["ensemble"],
             "level": [level],
             "type": ["validated_reanalysis"],
             "year": [year],
             "month": [month],
-            "area": [56.23, 36.7, 55.34, 38.59, ], }
+            "area": area, }
+
+        # подготовленная строка для удобного логгирования и названия .zip-архивов
+        log_str: str = f"{'.'.join(variable)}_{year}_{month}_{level}_{'.'.join([str(x) for x in area])}"
         try:
+            # скачиваем
             self.client.retrieve(dataset,
-                                 request,
-                                 Path(Path.cwd().parent, "data", f"{year}_{month}_{level}.zip")).download()
-            logging.info(f"year={year}, "
-                         f"month={month}, "
-                         f"level = {level} - success;")
-        except AttributeError:
-            pass
-        except requests.exceptions.HTTPError:
+                                 request).download(target=Path(Path.cwd().parent,
+                                                               "data",
+                                                               f"{log_str}.zip"))
+            logging.info(f"{log_str} - SUCCESS")
+        except requests.exceptions.HTTPError as er_http:
             # отлавливаем ошибку доступа, логгируем и идём дальше
-            logging.error(f"year={year}, "
-                          f"month={month}, "
-                          f"level = {level};")
+            logging.error(f"{er_http} {log_str}")
 
     def download_pipeline(self, dataset: str,
+                                variable: list[str],
+                                areas: list[list[float]],
                                 levels: list[str],
                                 years: list[str],
                                 months: list[str]) -> None:
         """
-        Ппроходимся по этим спискам и выкачиваем дынне.
-        :param dataset: датасет
-        :param levels: высоты
-        :param years: годы
+        :param dataset: имя датасета
+        :param variable: вещества
+        :param areas: ограничения по координатам
+        :param levels: набор уровней
+        :param years: года
         :param months: месяцы
+        :return: None
         """
-        for year in years:
-            for month in months:
-                for level in levels:
-                    self.download_data(dataset=dataset,
-                                       year=year,
-                                       month=month,
-                                       level=level)
+        # итерируемся по всему этому
+        for area in areas:
+            for year in years:
+                for month in months:
+                    for level in levels:
+                        self.download_data(dataset=dataset,
+                                           variable=variable,
+                                           year=year,
+                                           month=month,
+                                           level=level,
+                                           area=area)
 
 
 if __name__ == "__main__":
@@ -88,17 +102,35 @@ if __name__ == "__main__":
         token: str = yaml.safe_load(yaml_file).get("cds_token")
     obj: UseCdsApi = UseCdsApi(token=token)
 
-    # набор уровней, лет, месяцем по которым мы будем итерироваться
+    # имя датасета
     dataset: str = "cams-europe-air-quality-reanalyses"
+
+    # вещества, которые нас интересуют
+    variable: list[str] = ['particulate_matter_10um']
+    # 'nitrogen_dioxide', 'particulate_matter_2.5um', 'particulate_matter_10um'
+
+    # ограничения по координатам
+    # мгу 55.7, 37.5
+    # ифа 55.7, 37.6
+    # знс 55.6, 36.8
+    areas: list[list[float]] = [[55.7, 36.7, 55.7, 37.8]]
+    # набор уорвней
     levels: list[str] = ["0", "50",
                          "100", "250",
                          "500", "750",
                          "1000", "2000",
                          "3000", "5000"]
-    years: list[str] = ["2018", "2019", "2020", "2021", "2022", "2023"]
+    # years: list[str] = ["2018", "2019", "2020", "2021", "2022", "2023"]
+    # months: list[str] = ["01", "02", "03", "05", "06", "07", "08", "09", "10", "11", "12"]
+    # года
+    years: list[str] = ["2018"]
+    # месяцы
     months: list[str] = ["01", "02", "03", "05", "06", "07", "08", "09", "10", "11", "12"]
 
+    # запускаем пайплайн
     obj.download_pipeline(dataset=dataset,
+                          variable=variable,
+                          areas=areas,
                           levels=levels,
                           years=years,
                           months=months)

@@ -1,14 +1,19 @@
-# files
+# игнорировать файл с токеном
 tok.yaml
 
-# directories
+# игнорировать логи
+logs/py_log.log
+
+# игнорировать служебные директории
+notebooks/.ipynb_checkpoints
 .ipynb_checkpoints
 .venv
 .idea
-logs
+
+# игнорировать файлы
 cams
 
 
-# mask files
+# игнорировать выходные файлы
 *.zip
 *.nc
