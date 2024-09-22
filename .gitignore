@@ -12,6 +12,7 @@ notebooks/.ipynb_checkpoints
 
 # игнорировать файлы
 cams
+src/data_preparation/test.py
 
 
 # игнорировать выходные файлы

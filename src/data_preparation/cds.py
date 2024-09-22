@@ -26,7 +26,8 @@ class UseCdsApi(object):
         :param token: токен на сайте
         """
         self.client = cdsapi.Client(
-            url="https://ads-beta.atmosphere.copernicus.eu/api", key=token
+            # url="https://cds-beta.climate.copernicus.eu/api",
+            # key=token
         )
 
     def download_data(self,
@@ -113,7 +114,7 @@ if __name__ == "__main__":
     # мгу 55.7, 37.5
     # ифа 55.7, 37.6
     # знс 55.6, 36.8
-    areas: list[list[float]] = [[55.7, 36.7, 55.7, 37.8]]
+    areas: list[list[float]] = [[55.5, 36.7, 55.8, 37.8]]
     # набор уорвней
     levels: list[str] = [
         "0",
