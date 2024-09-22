@@ -54,8 +54,7 @@ class UseCdsApi(object):
             "type": ["validated_reanalysis"],
             "year": [year],
             "month": [month],
-            # "area": area,
-        }
+            "area": area, }
 
         # подготовленная строка для удобного логгирования и названия .zip-архивов
         log_str: str = f"{'.'.join(variable)}_{year}_{month}_{level}_{'.'.join([str(x) for x in area])}"
@@ -108,7 +107,7 @@ if __name__ == "__main__":
     dataset: str = "cams-europe-air-quality-reanalyses"
 
     # вещества, которые нас интересуют
-    variable: list[str] = ['particulate_matter_10um']
+    variable: list[str] = ['nitrogen_dioxide']
     # 'nitrogen_dioxide', 'particulate_matter_2.5um', 'particulate_matter_10um'
 
     # ограничения по координатам
@@ -130,26 +129,26 @@ if __name__ == "__main__":
         "5000"
     ]
     years: list[str] = [
-        "2018",
+        # "2018",
         # "2019",
-        # "2020",
+        "2020",
         # "2021",
         # "2022",
         # "2023"
     ]
     months: list[str] = [
         "01",
-        # "02",
-        # "03",
-        # "04",
-        # "05",
-        # "06",
-        # "07",
-        # "08",
-        # "09",
-        # "10",
-        # "11",
-        # "12"
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12"
     ]
 
     # запускаем пайплайн
